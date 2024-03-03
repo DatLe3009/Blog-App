@@ -61,7 +61,36 @@ class UserController {
         } else {
             res.sendStatus(401);
         }
+    }
+    static refreshToken = async (req, res) => {
+        const cookies = req.cookies;
+        if (!cookies?.jwt) return res.sendStatus(401);
+        const refreshToken = cookies.jwt;
 
+        const foundUser = await User.findOne({ refreshToken }).exec();
+        if (!foundUser) return res.sendStatus(403); // Forbidden
+        // evaluate jwt
+        jwt.verify(
+            refreshToken,
+            process.env.REFRESH_TOKEN_SECRET,
+            (err, decoded) => {
+                if (err || foundUser.username !== decoded.username) return res.sendStatus(403);
+                const accessToken = jwt.sign(
+                    {
+                        "UserInfo": {
+                            "username": decoded.username,
+                            "role": decoded.role
+                        }
+                    },
+                    process.env.ACCESS_TOKEN_SECRET,
+                    { expiresIn: '150s' }
+                )
+                res.json({ accessToken })
+            }
+        )
+    }
+    static logout = async (req, res) => {
+        // On client, also delete the access Token
     }
 }
 
