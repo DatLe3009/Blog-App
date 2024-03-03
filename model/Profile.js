@@ -19,6 +19,11 @@ const profileSchema = new Schema({
         type: String,
         required: true
     },
+    sex: {
+        type: String,
+        enum: ['male', 'female', 'other'],
+        required: true
+    },
     age: {
         type: Number,
         required: true
