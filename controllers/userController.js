@@ -2,6 +2,7 @@ const User = require('../model/User');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 class UserController {
+    // Features for accounts
     static register = async (req, res) => {
         const { username, email, password } = req.body;
         if (!username || !email || !password) return res.status(400).json({ 'message': 'username, email and password are required' });
@@ -108,6 +109,46 @@ class UserController {
 
         res.clearCookie('jwt', { httpOnly: true, sameSite: 'None', secure: true });
         res.sendStatus(204);
+    }
+    // CRUD API
+    static getAllUsers = async (req, res) => {
+        const users = await User.find();
+        if (!users) return res.status(204).json({ 'message': 'No users found' });
+        res.json(users);
+    }
+    static getUser = async (req, res) => {
+        if (!req?.params?.id) return res.status(400).json({ 'message': 'User ID required' });
+        const user = await User.findOne({ _id: req.params.id }).exec();
+        if (!user) {
+            return res.status(400).json({ 'message': `User ID ${req.params.id} NOT FOUND` })
+        }
+        res.json(user);
+    }
+    static updateUser = async (req, res) => {
+        if (!req?.params?.id) return res.status(400).json({ 'message': 'User ID required' });
+        const user = await User.findOne({ _id: req.params.id }).exec();
+        if (!user) {
+            return res.status(400).json({ 'message': `User ID ${req.params.id} NOT FOUND` })
+        }
+        if (req.body?.password) {
+            user.password = await bcrypt.hash(req.body.password, 10);
+        }
+        if (req.body?.username) {
+            const duplicateUsername = await User.findOne({ username: req.body.username }).exec();
+            if (duplicateUsername) return res.sendStatus(409); // Conflict
+            user.username = req.body.username;
+        }
+        const result = await user.save();
+        res.json(result);
+    }
+    static deleteUser = async (req, res) => {
+        if (!req?.params?.id) return res.status(400).json({ 'message': 'User ID required' });
+        const user = await User.findOne({ _id: req.params.id }).exec();
+        if (!user) {
+            return res.status(400).json({ 'message': `User ID ${req.params.id} NOT FOUND` })
+        }
+        const result = await user.deleteOne({ _id: req.params.id });
+        res.json(result);
     }
 }
 
