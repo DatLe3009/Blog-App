@@ -1,5 +1,4 @@
 const Post = require('../model/Post');
-const User = require('../model/User');
 class PostController {
     static getAllPosts = async (req, res) => {
         const posts = await Post.find();
@@ -44,18 +43,21 @@ class PostController {
         if (!post) {
             return res.status(400).json({ 'message': `Post ID ${req.params.id} not found` });
         }
+        if (!(req?.role === 'admin' || req?.user_id == post.user)) return res.sendStatus(401);
+
         if (req.body?.title) post.title = req.body.title;
-        if (req.body?.content) post.address = req.body.content;
+        if (req.body?.content) post.content = req.body.content;
         const result = await post.save();
         res.json(result);
     }
     static deletePost = async (req, res) => {
         if (!req?.params?.id) return res.status(400).json({ 'message': 'Post ID required' });
         const post = await Post.findOne({ _id: req.params.id }).exec();
-        if (!(req?.role === 'admin' || req?.user_id === post.user)) return res.sendStatus(401);
         if (!post) {
             return res.status(400).json({ 'message': `Post ID ${req.params.id} not found` });
         }
+        if (!(req?.role === 'admin' || req?.user_id == post.user)) return res.sendStatus(401);
+
         const result = await post.deleteOne({ _id: req.params.id });
         res.json(result);
     }
