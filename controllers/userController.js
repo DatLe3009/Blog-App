@@ -42,6 +42,7 @@ class UserController {
                 {
                     "UserInfo": {
                         "username": foundUser.username,
+                        "user_id": foundUser._id,
                         "role": foundUser.role
                     }
                 },
@@ -80,6 +81,7 @@ class UserController {
                     {
                         "UserInfo": {
                             "username": decoded.username,
+                            "user_id": decoded._id,
                             "role": decoded.role
                         }
                     },
