@@ -16,4 +16,8 @@ route.put('/api/v1/users/me', verifyJWT, UserController.updateUserByMe);
 route.put('/api/v1/users/:id', verifyJWT, verifyRole("admin"), UserController.updateUser);
 route.delete('/api/v1/users/:id', verifyJWT, verifyRole("admin"), UserController.deleteUser);
 
+route.get('/api/v1/users/:id/posts', verifyJWT, UserController.getPostsByUserID);
+route.get('/api/v1/users/:id/comments', verifyJWT, UserController.getCommentsByUserID);
+route.get('/api/v1/users/:id/friends', verifyJWT, UserController.getFriendsByUserID);
+
 module.exports = route;

@@ -1,4 +1,9 @@
 const User = require('../model/User');
+
+const Post = require('../model/Post');
+const Comment = require('../model/Comment');
+const Friendship = require('../model/Friendship');
+
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 class UserController {
@@ -176,6 +181,31 @@ class UserController {
         }
         const result = await user.deleteOne({ _id: req.params.id });
         res.json(result);
+    }
+    // Advanced API
+    static getPostsByUserID = async (req, res) => {
+        if (!req?.params?.id) return res.status(400).json({ 'message': 'User ID required' });
+        const posts = await Post.find({ user: req.params.id });
+        if (!posts || posts.length === 0) return res.status(204).json({ 'message': `No posts of user ID ${req.params.id} found` });
+        res.json(posts);
+    }
+    static getCommentsByUserID = async (req, res) => {
+        if (!req?.params?.id) return res.status(400).json({ 'message': 'User ID required' });
+        const comments = await Comment.find({ user: req.params.id });
+        if (!comments || comments.length === 0) return res.status(204).json({ 'message': `No comments of user ID ${req.params.id} found` });
+        res.json(comments);
+    }
+    static getFriendsByUserID = async (req, res) => {
+        if (!req?.params?.id) return res.status(400).json({ 'message': 'User ID required' });
+        const friendships = await Friendship.find({
+            $or: [
+                { user: req.params.id },
+                { friend: req.params.id }
+            ],
+            status: "accepted"
+        });
+        if (!friendships || friendships.length === 0) return res.status(204).json({ 'message': `No friends of user ID ${req.params.id} found` });
+        res.json(friendships.map((friendship) => friendship.user == req.params.id ? friendship.friend : friendship.user));
     }
 }
 
