@@ -11,6 +11,9 @@ route.get('/logout', UserController.logout);
 
 route.get('/api/v1/users', verifyJWT, UserController.getAllUsers);
 route.get('/api/v1/users/me', verifyJWT, UserController.getUserByMe);
+
+route.get('/api/v1/users/search', verifyJWT, UserController.getUserByQuery);
+
 route.get('/api/v1/users/:id', verifyJWT, UserController.getUser);
 route.put('/api/v1/users/me', verifyJWT, UserController.updateUserByMe);
 route.put('/api/v1/users/:id', verifyJWT, verifyRole("admin"), UserController.updateUser);
@@ -19,5 +22,6 @@ route.delete('/api/v1/users/:id', verifyJWT, verifyRole("admin"), UserController
 route.get('/api/v1/users/:id/posts', verifyJWT, UserController.getPostsByUserID);
 route.get('/api/v1/users/:id/comments', verifyJWT, UserController.getCommentsByUserID);
 route.get('/api/v1/users/:id/friends', verifyJWT, UserController.getFriendsByUserID);
+
 
 module.exports = route;

@@ -6,6 +6,7 @@ const Friendship = require('../model/Friendship');
 
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const { response } = require('express');
 class UserController {
     // Features for accounts
     static register = async (req, res) => {
@@ -207,6 +208,21 @@ class UserController {
         if (!friendships || friendships.length === 0) return res.status(204).json({ 'message': `No friends of user ID ${req.params.id} found` });
         res.json(friendships.map((friendship) => friendship.user == req.params.id ? friendship.friend : friendship.user));
     }
+    static getUserByQuery = async (req, res) => {
+        const { username, email } = req.query;
+        try {
+            const query = {};
+            if (username) query.username = { $regex: username, $options: 'i' };
+            if (email) query.email = { $regex: email, $options: 'i' };
+
+            const users = await User.find(query).exec();
+            res.json(users);
+        } catch (error) {
+            res.status(500).json({ 'message': err.message });
+        }
+
+    }
+
 }
 
 module.exports = UserController;
