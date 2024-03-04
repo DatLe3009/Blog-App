@@ -58,8 +58,28 @@ class ProfileController {
         const result = await profile.save();
         res.json(result);
     }
+    static updateProfileByMe = async (req, res) => {
+        if (!req?.user_id) return res.status(400).json({ 'message': 'User ID NOT FOUND' });
+        const profile = await Profile.findOne({ user: req.user_id }).exec();
+        if (!profile) {
+            res.status(400).json({ 'message': `Profile of User ID ${req.user_id} not found` });
+        }
+        if (req.body?.name) profile.name = req.body.name;
+        if (req.body?.address) profile.address = req.body.address;
+        if (req.body?.phone) profile.phone = req.body.phone;
+        if (req.body?.sex) profile.sex = req.body.sex;
+        if (req.body?.age) profile.age = req.body.age;
+        const result = await profile.save();
+        res.json(result);
+    }
     static deleteProfile = async (req, res) => {
-
+        if (!req?.params?.id) return res.status(400).json({ 'message': 'Profile ID required' });
+        const profile = await Profile.findOne({ _id: req.params.id }).exec();
+        if (!profile) {
+            res.status(400).json({ 'message': `Profile ID ${req.params.id} not found` });
+        }
+        const result = await profile.deleteOne({ _id: req.params.id });
+        res.json(result);
     }
 }
 

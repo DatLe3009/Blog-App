@@ -126,11 +126,36 @@ class UserController {
         }
         res.json(user);
     }
+    static getUserByMe = async (req, res) => {
+        if (!req?.user_id) return res.status(400).json({ 'message': 'User ID NOT FOUND' });
+        const user = await User.findOne({ _id: req.user_id }).exec();
+        if (!user) {
+            return res.status(400).json({ 'message': `User ID ${req.user_id} NOT FOUND` })
+        }
+        res.json(user);
+    }
     static updateUser = async (req, res) => {
         if (!req?.params?.id) return res.status(400).json({ 'message': 'User ID required' });
         const user = await User.findOne({ _id: req.params.id }).exec();
         if (!user) {
             return res.status(400).json({ 'message': `User ID ${req.params.id} NOT FOUND` })
+        }
+        if (req.body?.password) {
+            user.password = await bcrypt.hash(req.body.password, 10);
+        }
+        if (req.body?.username) {
+            const duplicateUsername = await User.findOne({ username: req.body.username }).exec();
+            if (duplicateUsername) return res.sendStatus(409); // Conflict
+            user.username = req.body.username;
+        }
+        const result = await user.save();
+        res.json(result);
+    }
+    static updateUserByMe = async (req, res) => {
+        if (!req?.user_id) return res.status(400).json({ 'message': 'User ID NOT FOUND' });
+        const user = await User.findOne({ _id: req.user_id }).exec();
+        if (!user) {
+            return res.status(400).json({ 'message': `User ID ${req.user_id} NOT FOUND` })
         }
         if (req.body?.password) {
             user.password = await bcrypt.hash(req.body.password, 10);
