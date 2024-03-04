@@ -1,4 +1,6 @@
 const Post = require('../model/Post');
+
+const Comment = require('../model/Comment');
 class PostController {
     static getAllPosts = async (req, res) => {
         const posts = await Post.find();
@@ -64,6 +66,26 @@ class PostController {
 
         const result = await post.deleteOne({ _id: req.params.id });
         res.json(result);
+    }
+    static getCommentsByPostID = async (req, res) => {
+        if (!req?.params.id) return res.status(400).json({ 'message': 'Post ID required' });
+        const comments = Comment.find({ post: req.params.id });
+        if (!comments) return res.status(204).json({ 'message': `No comments of PostID ${req.params.id} FOUND` });
+        res.json(comments);
+    }
+    static createNewComment = async (req, res) => {
+        const { content } = req.body;
+        if (!content || !req?.params.id) return res.status(400).json({ 'message': 'details of comment required' });
+        try {
+            await Comment.create({
+                "user": req.user_id,
+                "post": req.paramss.id,   // post is Post ID
+                "content": content
+            });
+            res.status(201).json({ 'message': `Comment ${content} of Post ID ${post} created` });
+        } catch (err) {
+            res.status(500).json({ 'message': err.message });
+        }
     }
 }
 

@@ -11,4 +11,7 @@ route.post('/api/v1/posts', verifyJWT, PostController.createNewPost);
 route.put('/api/v1/posts/:id', verifyJWT, PostController.updatePost);
 route.delete('/api/v1/posts/:id', verifyJWT, PostController.deletePost);
 
+route.get('/api/v1/posts/:id/comments', verifyJWT, PostController.getCommentsByPostID);
+route.post('/api/v1/posts/:id/comments', verifyJWT, PostController.createNewComment);
+
 module.exports = route;
