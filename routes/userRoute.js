@@ -23,5 +23,7 @@ route.get('/api/v1/users/:id/posts', verifyJWT, UserController.getPostsByUserID)
 route.get('/api/v1/users/:id/comments', verifyJWT, UserController.getCommentsByUserID);
 route.get('/api/v1/users/:id/friends', verifyJWT, UserController.getFriendsByUserID);
 
+route.post('/api/v1/users/:id/friends/:friendId', verifyJWT, verifyRole("admin"), UserController.createNewFriendshipByAdmin);
+
 
 module.exports = route;

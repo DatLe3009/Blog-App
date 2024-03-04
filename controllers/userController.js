@@ -222,6 +222,36 @@ class UserController {
         }
 
     }
+    static createNewFriendshipByAdmin = async (req, res) => {
+        const { id, friendId } = req.params;
+        if (!id || !friendId) return res.status(400).json({ 'message': 'User ID and friend ID are required' });
+
+        // Check duplicate relationship between user and friend
+        const existingFriendship = await Friendship.findOne({
+            $or: [
+                { user: id, friend: friendId },
+                { user: friendId, friend: id },
+            ],
+        }).exec();
+        if (existingFriendship) {
+            if (existingFriendship.status === "accepted") {
+                return res.status(409).json({ 'message': 'friend in friends list exists' });
+            }
+            existingFriendship.status = "accepted";
+            await existingFriendship.save();
+            return res.status(201).json({ 'message': `friendship between User ID ${id} and User ID ${friendId} created` });
+        }
+        try {
+            await Friendship.create({
+                "user": id,
+                "friend": friendId,
+                "status": "accepted"
+            });
+            res.status(201).json({ 'message': `friendship between User ID ${id} and User ID ${friendId} created` });
+        } catch (err) {
+            res.status(500).json({ 'message': err.message });
+        }
+    }
 
 }
 
