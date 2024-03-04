@@ -12,7 +12,7 @@ route.get('/logout', UserController.logout);
 route.get('/api/v1/users', verifyJWT, UserController.getAllUsers);
 route.get('/api/v1/users/me', verifyJWT, UserController.getUserByMe);
 
-route.get('/api/v1/users/search', verifyJWT, UserController.getUserByQuery);
+route.get('/api/v1/users/search', verifyJWT, UserController.getUsersByQuery);
 
 route.get('/api/v1/users/:id', verifyJWT, UserController.getUser);
 route.put('/api/v1/users/me', verifyJWT, UserController.updateUserByMe);

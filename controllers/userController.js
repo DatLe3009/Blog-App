@@ -208,7 +208,7 @@ class UserController {
         if (!friendships || friendships.length === 0) return res.status(204).json({ 'message': `No friends of user ID ${req.params.id} found` });
         res.json(friendships.map((friendship) => friendship.user == req.params.id ? friendship.friend : friendship.user));
     }
-    static getUserByQuery = async (req, res) => {
+    static getUsersByQuery = async (req, res) => {
         const { username, email } = req.query;
         try {
             const query = {};
