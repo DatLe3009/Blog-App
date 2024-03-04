@@ -64,6 +64,16 @@ class CommentController {
         const result = await comment.deleteOne({ _id: req.params.id });
         res.json(result);
     }
+    static getUserByCommentID = async (req, res) => {
+        if (!req?.params?.id) return res.status(400).json({ 'message': 'Comment ID required' });
+        const comment = await Comment.findOne({ _id: req.params.id }).exec();
+        if (!comment) {
+            return res.status(400).json({ 'message': `comment ID ${req.params.id} not found` });
+        }
+        const user = await User.findOne({ _id: comment.user }).exec();
+        if (!user) return res.status(400).json({ 'message': `User ID ${comment.user} not found` });
+        res.json(user);
+    }
 }
 
 module.exports = CommentController;

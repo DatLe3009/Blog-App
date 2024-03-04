@@ -88,14 +88,14 @@ class ProfileController {
             return res.status(400).json({ 'message': `Profile ID ${req.params.id} not found` });
         }
         const user = await User.findOne({ _id: profile.user }).exec();
-        if (!user) return res.status(400).json({ 'message': `Profile ID ${req.params.id} not found` });
+        if (!user) return res.status(400).json({ 'message': `User ID ${profile.user} not found` });
         res.json(user);
     }
     static getProfilesByQuery = async (req, res) => {
         const { name, address, phone, sex, age } = req.query;
         try {
             const query = {};
-            if (name) query.name = { $regex: name, $options: 'xi' };
+            if (name) query.name = { $regex: name, $options: 'i' };
             if (address) query.address = { $regex: address, $options: 'i' };
             if (phone) query.phone = { $regex: phone, $options: 'i' };
             if (sex) query.sex = { $eq: sex.toLowerCase() };
