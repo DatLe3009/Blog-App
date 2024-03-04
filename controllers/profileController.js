@@ -81,6 +81,31 @@ class ProfileController {
         const result = await profile.deleteOne({ _id: req.params.id });
         res.json(result);
     }
+    static getUserByProfileID = async (req, res) => {
+        if (!req?.params?.id) return res.status(400).json({ 'message': 'Profile ID required' });
+        const profile = await Profile.findOne({ _id: req.params.id }).exec();
+        if (!profile) {
+            return res.status(400).json({ 'message': `Profile ID ${req.params.id} not found` });
+        }
+        const user = await User.findOne({ _id: profile.user }).exec();
+        if (!user) return res.status(400).json({ 'message': `Profile ID ${req.params.id} not found` });
+        res.json(user);
+    }
+    static getProfilesByQuery = async (req, res) => {
+        const { name, address, phone, sex, age } = req.query;
+        try {
+            const query = {};
+            if (name) query.name = { $regex: name, $options: 'xi' };
+            if (address) query.address = { $regex: address, $options: 'i' };
+            if (phone) query.phone = { $regex: phone, $options: 'i' };
+            if (sex) query.sex = { $eq: sex.toLowerCase() };
+            if (age) query.age = { $eq: parseInt(age) };
+            const profiles = await Profile.find(query).exec();
+            res.json(profiles);
+        } catch (err) {
+            res.status(500).json({ 'message': err.message });
+        }
+    }
 }
 
 module.exports = ProfileController;
