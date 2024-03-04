@@ -43,6 +43,8 @@ class PostController {
         if (!post) {
             return res.status(400).json({ 'message': `Post ID ${req.params.id} not found` });
         }
+
+        // verifyOwnership 
         if (!(req?.role === 'admin' || req?.user_id == post.user)) return res.sendStatus(401);
 
         if (req.body?.title) post.title = req.body.title;
@@ -56,6 +58,8 @@ class PostController {
         if (!post) {
             return res.status(400).json({ 'message': `Post ID ${req.params.id} not found` });
         }
+
+        // verifyOwnership 
         if (!(req?.role === 'admin' || req?.user_id == post.user)) return res.sendStatus(401);
 
         const result = await post.deleteOne({ _id: req.params.id });

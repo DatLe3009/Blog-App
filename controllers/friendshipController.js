@@ -61,6 +61,7 @@ class FriendshipController {
         if (!friendship) {
             return res.status(400).json({ 'message': `friendship ID ${req.params.id} not found` });
         }
+
         // Only admin or receiver can update friendship
         if (!(req?.role === 'admin' || req?.user_id == friendship.friend)) return res.sendStatus(401);
 
@@ -74,6 +75,8 @@ class FriendshipController {
         if (!friendship) {
             return res.status(400).json({ 'message': `Friendship ID ${req.params.id} not found` });
         }
+
+        // verifyOwnership 
         if (!(req?.role === 'admin' || req?.user_id == friendship.user || req?.user_id == friendship.friend)) return res.sendStatus(401);
 
         const result = await friendship.deleteOne({ _id: req.params.id });

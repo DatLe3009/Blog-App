@@ -43,6 +43,8 @@ class CommentController {
         if (!comment) {
             return res.status(400).json({ 'message': `comment ID ${req.params.id} not found` });
         }
+
+        // verifyOwnership 
         if (!(req?.role === 'admin' || req?.user_id == comment.user)) return res.sendStatus(401);
 
         if (req.body?.content) comment.content = req.body.content;
@@ -55,6 +57,8 @@ class CommentController {
         if (!comment) {
             return res.status(400).json({ 'message': `comment ID ${req.params.id} not found` });
         }
+
+        // verifyOwnership 
         if (!(req?.role === 'admin' || req?.user_id == comment.user)) return res.sendStatus(401);
 
         const result = await comment.deleteOne({ _id: req.params.id });

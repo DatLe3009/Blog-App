@@ -47,7 +47,7 @@ class UserController {
                     }
                 },
                 process.env.ACCESS_TOKEN_SECRET,
-                { expiresIn: '300s' }
+                { expiresIn: '900s' }
             );
             const refreshToken = jwt.sign(
                 { "username": foundUser.username },
@@ -86,7 +86,7 @@ class UserController {
                         }
                     },
                     process.env.ACCESS_TOKEN_SECRET,
-                    { expiresIn: '300s' }
+                    { expiresIn: '900s' }
                 )
                 res.json({ accessToken })
             }
