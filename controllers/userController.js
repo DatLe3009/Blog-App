@@ -115,7 +115,7 @@ class UserController {
     // CRUD API
     static getAllUsers = async (req, res) => {
         const users = await User.find();
-        if (!users) return res.status(204).json({ 'message': 'No users found' });
+        if (!users || users.length === 0) return res.status(204).json({ 'message': 'No users found' });
         res.json(users);
     }
     static getUser = async (req, res) => {
@@ -168,7 +168,7 @@ class UserController {
         const result = await user.save();
         res.json(result);
     }
-    static deleteUser = async (req, res) => {
+    static deleteUser = async (req, res) => {   // Delete user require delete relation of user from other table of database
         if (!req?.params?.id) return res.status(400).json({ 'message': 'User ID required' });
         const user = await User.findOne({ _id: req.params.id }).exec();
         if (!user) {

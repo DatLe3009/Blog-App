@@ -3,7 +3,7 @@ const User = require('../model/User');
 class ProfileController {
     static getAllProfiles = async (req, res) => {
         const profiles = await Profile.find();
-        if (!profiles) return res.status(204).json({ 'message': 'No profiles found' });
+        if (!profiles || profiles.length) return res.status(204).json({ 'message': 'No profiles found' });
         res.json(profiles);
     }
     static getProfile = async (req, res) => {
@@ -48,7 +48,7 @@ class ProfileController {
         if (!req?.params?.id) return res.status(400).json({ 'message': 'Profile ID required' });
         const profile = await Profile.findOne({ _id: req.params.id }).exec();
         if (!profile) {
-            res.status(400).json({ 'message': `Profile ID ${req.params.id} not found` });
+            return res.status(400).json({ 'message': `Profile ID ${req.params.id} not found` });
         }
         if (req.body?.name) profile.name = req.body.name;
         if (req.body?.address) profile.address = req.body.address;
@@ -62,7 +62,7 @@ class ProfileController {
         if (!req?.user_id) return res.status(400).json({ 'message': 'User ID NOT FOUND' });
         const profile = await Profile.findOne({ user: req.user_id }).exec();
         if (!profile) {
-            res.status(400).json({ 'message': `Profile of User ID ${req.user_id} not found` });
+            return res.status(400).json({ 'message': `Profile of User ID ${req.user_id} not found` });
         }
         if (req.body?.name) profile.name = req.body.name;
         if (req.body?.address) profile.address = req.body.address;
@@ -76,7 +76,7 @@ class ProfileController {
         if (!req?.params?.id) return res.status(400).json({ 'message': 'Profile ID required' });
         const profile = await Profile.findOne({ _id: req.params.id }).exec();
         if (!profile) {
-            res.status(400).json({ 'message': `Profile ID ${req.params.id} not found` });
+            return res.status(400).json({ 'message': `Profile ID ${req.params.id} not found` });
         }
         const result = await profile.deleteOne({ _id: req.params.id });
         res.json(result);
