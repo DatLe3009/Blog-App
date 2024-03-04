@@ -252,6 +252,23 @@ class UserController {
             res.status(500).json({ 'message': err.message });
         }
     }
+    static deleteFriendshipByAdmin = async (req, res) => {
+        const { id, friendId } = req.params;
+        if (!id || !friendId) return res.status(400).json({ 'message': 'User ID and friend ID are required' });
+
+        const existingFriendship = await Friendship.findOne({
+            $or: [
+                { user: id, friend: friendId },
+                { user: friendId, friend: id },
+            ],
+        }).exec();
+
+        if (!existingFriendship) {
+            return res.status(400).json({ 'message': `friendship between User ID ${id} and User ID ${friendId} NOT FOUND` });
+        }
+        const result = await existingFriendship.deleteOne({ _id: existingFriendship._id });
+        res.json(result);
+    }
 
 }
 

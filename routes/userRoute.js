@@ -24,6 +24,6 @@ route.get('/api/v1/users/:id/comments', verifyJWT, UserController.getCommentsByU
 route.get('/api/v1/users/:id/friends', verifyJWT, UserController.getFriendsByUserID);
 
 route.post('/api/v1/users/:id/friends/:friendId', verifyJWT, verifyRole("admin"), UserController.createNewFriendshipByAdmin);
-
+route.delete('/api/v1/users/:id/friends/:friendId', verifyJWT, verifyRole("admin"), UserController.deleteFriendshipByAdmin);
 
 module.exports = route;
