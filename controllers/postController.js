@@ -13,7 +13,7 @@ class PostController {
         }
         res.json(post);
     }
-    static getPostByMe = async (req, res) => {
+    static getPostsByMe = async (req, res) => {
         if (!req?.user_id) return res.status(400).json({ 'message': 'User ID NOT FOUND' });
         const post = await Post.find({ user: req.user_id });
         if (!post) {

@@ -13,7 +13,7 @@ class CommentController {
         }
         res.json(comment);
     }
-    static getCommentByMe = async (req, res) => {
+    static getCommentsByMe = async (req, res) => {
         if (!req?.user_id) return res.status(400).json({ 'message': 'User ID NOT FOUND' });
         const comment = await Comment.find({ user: req.user_id });
         if (!comment) {
