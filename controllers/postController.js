@@ -87,6 +87,18 @@ class PostController {
             res.status(500).json({ 'message': err.message });
         }
     }
+    static getPostsByQuery = async (req, res) => {
+        const { title, content } = req.query;
+        try {
+            const query = {};
+            if (title) query.title = { $regex: title, $options: 'i' };
+            if (content) query.content = { $regex: content, $options: 'i' };
+            const posts = await Post.find(query).exec();
+            res.json(posts);
+        } catch (err) {
+            res.status(500).json({ 'message': err.message });
+        }
+    }
 }
 
 module.exports = PostController;
