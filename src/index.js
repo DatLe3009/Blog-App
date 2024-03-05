@@ -16,7 +16,7 @@ app.use(cors({ credentials: true, origin: true }));
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 app.use(cookiesParser());
-app.use('/', express.static(path.join(__dirname, 'public')));
+app.use('/', express.static(path.join(__dirname, '../public')));
 // Routes
 app.use('/', require('./routes/root'));
 app.all('*', (req, res) => {
