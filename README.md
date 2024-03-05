@@ -68,6 +68,7 @@ get            https://blog-app-latest.onrender.com/api/v1/posts/:id            
 post            https://blog-app-latest.onrender.com/api/v1/posts                    createNewPost              title, content
 
 put            https://blog-app-latest.onrender.com/api/v1/posts/:id                 updatePost                 title, content
+
 delete            https://blog-app-latest.onrender.com/api/v1/posts/:id              deletePost
 
 get            https://blog-app-latest.onrender.com/api/v1/posts/:id/comments        getCommentsByPostID        
@@ -102,7 +103,9 @@ get            https://blog-app-latest.onrender.com/api/v1/friendships/me       
 get            https://blog-app-latest.onrender.com/api/v1/friendships/:id           getFriendship
 
 post            https://blog-app-latest.onrender.com/api/v1/friendships              createNewFriendship          friend
+
 put            https://blog-app-latest.onrender.com/api/v1/friendships/:id           updateFriendship             status
+
 delete            https://blog-app-latest.onrender.com/api/v1/friendships/:id        deleteFriendship
 
 
