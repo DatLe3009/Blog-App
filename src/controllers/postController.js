@@ -29,11 +29,11 @@ class PostController {
         if (!req?.user_id) return res.status(400).json({ 'message': 'User ID NOT FOUND' });
 
         try {
-            const post = await Post.find({ user: req.user_id });
-            if (!post || post.length === 0) {
+            const posts = await Post.find({ user: req.user_id });
+            if (!posts || posts.length === 0) {
                 return res.status(204).json({ 'message': `Your posts not found` });
             }
-            res.json(post);
+            res.json(posts);
         } catch (err) {
             res.status(500).json({ 'message': err.message });
         }
