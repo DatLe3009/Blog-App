@@ -4,7 +4,7 @@ class ProfileController {
     static getAllProfiles = async (req, res) => {
         try {
             const profiles = await Profile.find();
-            if (!profiles || profiles.length) return res.status(204).json({ 'message': 'No profiles found' });
+            if (!profiles || profiles.length === 0) return res.status(204).json({ 'message': 'No profiles found' });
             res.json(profiles);
         } catch (err) {
             res.status(500).json({ 'message': err.message });
