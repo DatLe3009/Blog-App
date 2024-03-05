@@ -1,25 +1,39 @@
 const Comment = require('../model/Comment');
 class CommentController {
     static getAllComments = async (req, res) => {
-        const comments = await Comment.find();
-        if (!comments || comments.length === 0) return res.status(204).json({ 'message': 'No comments found' });
-        res.json(comments);
+        try {
+            const comments = await Comment.find();
+            if (!comments || comments.length === 0) return res.status(204).json({ 'message': 'No comments found' });
+            res.json(comments);
+        } catch (err) {
+            res.status(500).json({ 'message': err.message });
+        }
     }
     static getComment = async (req, res) => {
         if (!req?.params?.id) return res.status(400).json({ 'message': 'Comment ID required' });
-        const comment = await Comment.findOne({ _id: req.params.id }).exec();
-        if (!comment) {
-            return res.status(400).json({ 'message': `Comment ID ${req.params.id} not found` });
+
+        try {
+            const comment = await Comment.findOne({ _id: req.params.id }).exec();
+            if (!comment) {
+                return res.status(400).json({ 'message': `Comment ID ${req.params.id} not found` });
+            }
+            res.json(comment);
+        } catch (err) {
+            res.status(500).json({ 'message': err.message });
         }
-        res.json(comment);
     }
     static getCommentsByMe = async (req, res) => {
         if (!req?.user_id) return res.status(400).json({ 'message': 'User ID NOT FOUND' });
-        const comment = await Comment.find({ user: req.user_id });
-        if (!comment) {
-            return res.status(400).json({ 'message': `Your comment not found` });
+
+        try {
+            const comment = await Comment.find({ user: req.user_id });
+            if (!comment) {
+                return res.status(400).json({ 'message': `Your comment not found` });
+            }
+            res.json(comment);
+        } catch (err) {
+            res.status(500).json({ 'message': err.message });
         }
-        res.json(comment);
     }
     static createNewComment = async (req, res) => {
         const { content, post } = req.body;
@@ -39,40 +53,54 @@ class CommentController {
     }
     static updateComment = async (req, res) => {
         if (!req?.params?.id) return res.status(400).json({ 'message': 'Comment ID required' });
-        const comment = await Comment.findOne({ _id: req.params.id }).exec();
-        if (!comment) {
-            return res.status(400).json({ 'message': `comment ID ${req.params.id} not found` });
+
+        try {
+            const comment = await Comment.findOne({ _id: req.params.id }).exec();
+            if (!comment) {
+                return res.status(400).json({ 'message': `comment ID ${req.params.id} not found` });
+            }
+
+            // verifyOwnership 
+            if (!(req?.role === 'admin' || req?.user_id == comment.user)) return res.sendStatus(401);
+
+            if (req.body?.content) comment.content = req.body.content;
+            const result = await comment.save();
+            res.json(result);
+        } catch (err) {
+            res.status(500).json({ 'message': err.message });
         }
-
-        // verifyOwnership 
-        if (!(req?.role === 'admin' || req?.user_id == comment.user)) return res.sendStatus(401);
-
-        if (req.body?.content) comment.content = req.body.content;
-        const result = await comment.save();
-        res.json(result);
     }
     static deleteComment = async (req, res) => {
         if (!req?.params?.id) return res.status(400).json({ 'message': 'Comment ID required' });
-        const comment = await Comment.findOne({ _id: req.params.id }).exec();
-        if (!comment) {
-            return res.status(400).json({ 'message': `comment ID ${req.params.id} not found` });
+
+        try {
+            const comment = await Comment.findOne({ _id: req.params.id }).exec();
+            if (!comment) {
+                return res.status(400).json({ 'message': `comment ID ${req.params.id} not found` });
+            }
+            // verifyOwnership 
+            if (!(req?.role === 'admin' || req?.user_id == comment.user)) return res.sendStatus(401);
+
+            const result = await comment.deleteOne({ _id: req.params.id });
+            res.json(result);
+        } catch (err) {
+            res.status(500).json({ 'message': err.message });
         }
-
-        // verifyOwnership 
-        if (!(req?.role === 'admin' || req?.user_id == comment.user)) return res.sendStatus(401);
-
-        const result = await comment.deleteOne({ _id: req.params.id });
-        res.json(result);
     }
     static getUserByCommentID = async (req, res) => {
         if (!req?.params?.id) return res.status(400).json({ 'message': 'Comment ID required' });
-        const comment = await Comment.findOne({ _id: req.params.id }).exec();
-        if (!comment) {
-            return res.status(400).json({ 'message': `comment ID ${req.params.id} not found` });
+
+        try {
+            const comment = await Comment.findOne({ _id: req.params.id }).exec();
+            if (!comment) {
+                return res.status(400).json({ 'message': `comment ID ${req.params.id} not found` });
+            }
+            const user = await User.findOne({ _id: comment.user }).exec();
+            if (!user) return res.status(400).json({ 'message': `User ID ${comment.user} not found` });
+            res.json(user);
+        } catch (err) {
+            res.status(500).json({ 'message': err.message });
         }
-        const user = await User.findOne({ _id: comment.user }).exec();
-        if (!user) return res.status(400).json({ 'message': `User ID ${comment.user} not found` });
-        res.json(user);
     }
 }
 
