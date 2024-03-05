@@ -26,11 +26,11 @@ class CommentController {
         if (!req?.user_id) return res.status(400).json({ 'message': 'User ID NOT FOUND' });
 
         try {
-            const comment = await Comment.find({ user: req.user_id });
-            if (!comment) {
+            const comments = await Comment.find({ user: req.user_id });
+            if (!comments || comments.length === 0) {
                 return res.status(400).json({ 'message': `Your comment not found` });
             }
-            res.json(comment);
+            res.json(comments);
         } catch (err) {
             res.status(500).json({ 'message': err.message });
         }

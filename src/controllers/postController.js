@@ -30,8 +30,8 @@ class PostController {
 
         try {
             const post = await Post.find({ user: req.user_id });
-            if (!post) {
-                return res.status(400).json({ 'message': `Your post not found` });
+            if (!post || post.length === 0) {
+                return res.status(204).json({ 'message': `Your posts not found` });
             }
             res.json(post);
         } catch (err) {
@@ -95,7 +95,7 @@ class PostController {
 
         try {
             const comments = await Comment.find({ post: req.params.id });
-            if (!comments) return res.status(204).json({ 'message': `No comments of PostID ${req.params.id} FOUND` });
+            if (!comments || comments.length === 0) return res.status(204).json({ 'message': `No comments of PostID ${req.params.id} FOUND` });
             res.json(comments);
         } catch (err) {
             res.status(500).json({ 'message': err.message });

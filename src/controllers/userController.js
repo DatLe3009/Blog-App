@@ -23,7 +23,7 @@ class UserController {
                     { email: email }
                 ]
             }).exec();
-            if (duplicate) return res.sendStatus(409); // Conflict
+            if (duplicate && duplicate.length > 0) return res.sendStatus(409); // Conflict
 
             // encrypt the password
             const hashedPwd = await bcrypt.hash(password, 10);

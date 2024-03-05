@@ -34,8 +34,8 @@ class FriendshipController {
                     { friend: req.user_id }
                 ],
             });
-            if (!friendship) {
-                return res.status(400).json({ 'message': `Your friendships not found` });
+            if (!friendship || friendship.length === 0) {
+                return res.status(204).json({ 'message': `Your friendships not found` });
             }
             res.json(friendship);
         } catch (err) {
