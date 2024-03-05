@@ -17,5 +17,5 @@ RUN npm install
 
 EXPOSE 3500
 
-# Start the app using serve command
+# CMD
 CMD [ "node", "src/index.js" ]
