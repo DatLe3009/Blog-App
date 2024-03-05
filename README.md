@@ -4,9 +4,9 @@
 
 ## methods|url                                                                      |function                    |req.body
 
-post      https://blog-app-latest.onrender.com/register                              register                     email, username, password 
+post      https://blog-app-latest.onrender.com/register                              register                     {email, username, password} 
 
-post      https://blog-app-latest.onrender.com/login                                 login                        email, password
+post      https://blog-app-latest.onrender.com/login                                 login                        {email, password}
 
 get       https://blog-app-latest.onrender.com/refresh                               refreshToken
 
@@ -20,9 +20,9 @@ get       https://blog-app-latest.onrender.com/api/v1/users/search?query=       
 
 get       https://blog-app-latest.onrender.com/api/v1/users/:id                      getUser
 
-put       https://blog-app-latest.onrender.com/api/v1/users/me                       updateUserByMe               password, username
+put       https://blog-app-latest.onrender.com/api/v1/users/me                       updateUserByMe               {password, username}
 
-put       https://blog-app-latest.onrender.com/api/v1/users/:id                      updateUser                   password, usernmae
+put       https://blog-app-latest.onrender.com/api/v1/users/:id                      updateUser                   {password, usernmae}
 
 delete    https://blog-app-latest.onrender.com/api/v1/users/:id                      deleteUser
 
@@ -45,11 +45,11 @@ get       https://blog-app-latest.onrender.com/api/v1/profiles/search?query=    
 
 get       https://blog-app-latest.onrender.com/api/v1/profiles/:id                   getProfile
 
-post      https://blog-app-latest.onrender.com/api/v1/profiles                       createNewProfile          name, address, phone, sex, age
+post      https://blog-app-latest.onrender.com/api/v1/profiles                       createNewProfile          {name, address, phone, sex, age}
 
-put       https://blog-app-latest.onrender.com/api/v1/profiles/me                    updateProfileByMe         name, address, phone, sex, age
+put       https://blog-app-latest.onrender.com/api/v1/profiles/me                    updateProfileByMe         {name, address, phone, sex, age}
 
-put       https://blog-app-latest.onrender.com/api/v1/profiles/:id                   updateProfile             name, address, phone, sex, age
+put       https://blog-app-latest.onrender.com/api/v1/profiles/:id                   updateProfile             {name, address, phone, sex, age}
 
 delete    https://blog-app-latest.onrender.com/api/v1/profiles/:id                   deleteProfile
 
@@ -65,15 +65,15 @@ get            https://blog-app-latest.onrender.com/api/v1/posts/search?query=  
 
 get            https://blog-app-latest.onrender.com/api/v1/posts/:id                 getPost
 
-post            https://blog-app-latest.onrender.com/api/v1/posts                    createNewPost              title, content
+post            https://blog-app-latest.onrender.com/api/v1/posts                    createNewPost              {title, content}
 
-put            https://blog-app-latest.onrender.com/api/v1/posts/:id                 updatePost                 title, content
+put            https://blog-app-latest.onrender.com/api/v1/posts/:id                 updatePost                 {title, content}
 
 delete            https://blog-app-latest.onrender.com/api/v1/posts/:id              deletePost
 
 get            https://blog-app-latest.onrender.com/api/v1/posts/:id/comments        getCommentsByPostID        
 
-post            https://blog-app-latest.onrender.com/api/v1/posts/:id/comments       createNewComment           content
+post            https://blog-app-latest.onrender.com/api/v1/posts/:id/comments       createNewComment           {content}
 
 get            https://blog-app-latest.onrender.com/api/v1/posts/:id/likes           getLikesByPostID
 
@@ -102,9 +102,9 @@ get            https://blog-app-latest.onrender.com/api/v1/friendships/me       
 
 get            https://blog-app-latest.onrender.com/api/v1/friendships/:id           getFriendship
 
-post            https://blog-app-latest.onrender.com/api/v1/friendships              createNewFriendship          friend
+post            https://blog-app-latest.onrender.com/api/v1/friendships              createNewFriendship          {friend}
 
-put            https://blog-app-latest.onrender.com/api/v1/friendships/:id           updateFriendship             status
+put            https://blog-app-latest.onrender.com/api/v1/friendships/:id           updateFriendship             {status}
 
 delete            https://blog-app-latest.onrender.com/api/v1/friendships/:id        deleteFriendship
 
