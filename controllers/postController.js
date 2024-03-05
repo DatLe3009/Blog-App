@@ -1,6 +1,7 @@
 const Post = require('../model/Post');
 
 const Comment = require('../model/Comment');
+const Like = require('../model/Like');
 class PostController {
     static getAllPosts = async (req, res) => {
         const posts = await Post.find();
@@ -98,6 +99,34 @@ class PostController {
         } catch (err) {
             res.status(500).json({ 'message': err.message });
         }
+    }
+    static getLikesByPostID = async (req, res) => {
+        if (!req?.params.id) return res.status(400).json({ 'message': 'details of Like required' });
+        const likes = await Like.find({ post: req.params.id });
+        res.json(likes);
+    }
+    static createNewLike = async (req, res) => {
+        if (!req?.params.id || !req?.user_id) return res.status(400).json({ 'message': 'details of Like required' });
+        // Check duplicate Like
+        const duplicateLike = await Like.findOne({ user: req.user_id, post: req.params.id }).exec();
+        if (duplicateLike) return res.status(400).json({ 'message': 'You already liked this post' });
+        try {
+            await Like.create({
+                user: req.user_id,
+                post: req.params.id
+            });
+            res.status(201).json({ 'message': `You liked a post with postID ${req.params.id}` });
+        } catch (err) {
+            res.status(500).json({ 'message': err.message });
+        }
+    }
+    static deleteLike = async (req, res) => {
+        if (!req?.params.id || !req?.user_id) return res.status(400).json({ 'message': 'details of Like required' });
+        // Check exist of Like
+        const like = await Like.findOne({ user: req.user_id, post: req.params.id }).exec();
+        if (!like) return res.status(400).json({ 'message': 'You did not like this post yet' });
+        const result = await like.deleteOne({ _id: like._id });
+        res.json(result);
     }
 }
 

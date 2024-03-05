@@ -17,4 +17,8 @@ route.delete('/api/v1/posts/:id', verifyJWT, PostController.deletePost);
 route.get('/api/v1/posts/:id/comments', verifyJWT, PostController.getCommentsByPostID);
 route.post('/api/v1/posts/:id/comments', verifyJWT, PostController.createNewComment);
 
+route.get('/api/v1/posts/:id/likes', verifyJWT, PostController.getLikesByPostID);
+route.post('/api/v1/posts/:id/likes', verifyJWT, PostController.createNewLike);
+route.delete('/api/v1/posts/:id/likes', verifyJWT, PostController.deleteLike);
+
 module.exports = route;
