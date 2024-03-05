@@ -2,7 +2,7 @@
 
 # root API: https://blog-app-latest.onrender.com
 
-## methods|url                                                                      |function                    |req.body
+## methods|url                                                                      |function                    |{req.body}
 
 post      https://blog-app-latest.onrender.com/register                              register                     {email, username, password} 
 
