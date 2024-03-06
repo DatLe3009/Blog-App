@@ -89,9 +89,9 @@ get            https://blog-app-latest.onrender.com/api/v1/comments/me          
 
 get            https://blog-app-latest.onrender.com/api/v1/comments/:id              getComment
 
-post            https://blog-app-latest.onrender.com/api/v1/comments                 createNewComment
+post            https://blog-app-latest.onrender.com/api/v1/comments                 createNewComment           {post, content}
 
-put            https://blog-app-latest.onrender.com/api/v1/comments/:id              updateComment
+put            https://blog-app-latest.onrender.com/api/v1/comments/:id              updateComment              {content}
 
 delete            https://blog-app-latest.onrender.com/api/v1/comments/:id           deleteComment
 
